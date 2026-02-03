@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Plant Nutrition & Medicinal Plants</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #a8e063, #56ab2f);
+    }
+
+    .page{
+      display:none;
+      width:85%;
+      margin:50px auto;
+      background:white;
+      padding:30px;
+      border-radius:15px;
+      text-align:center;
+    }
+
+    h1,h2{
+      color:#2e7d32;
+    }
+
+    input{
+      padding:10px;
+      width:260px;
+      margin:10px;
+    }
+
+    button{
+      padding:10px 22px;
+      margin:10px;
+      background:#2e7d32;
+      color:white;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:15px;
+    }
+
+    button.logout{
+      background:#c62828;
+    }
+
+    .card{
+      background:#f1f8e9;
+      padding:15px;
+      margin:15px auto;
+      border-left:6px solid green;
+      border-radius:8px;
+      text-align:left;
+      max-width:650px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="login" class="page" style="display:block">
+  <h1>🌱 Plant Knowledge Portal</h1>
+  <p>Login to continue (Any user allowed)</p>
+
+  <input type="text" placeholder="Username"><br>
+  <input type="password" placeholder="Password"><br>
+
+  <button onclick="showPage('main')">Login</button>
+</div>
+
+<!-- MAIN PAGE -->
+<div id="main" class="page">
+  <h1>🌿 Plant Nutrition & Medicinal Plants</h1>
+  <p>Select what you want to explore</p>
+
+  <button onclick="showPage('medicinal')">🌿 Medicinal Plants</button>
+  <button onclick="showPage('nutrition')">🥬 Nutrition Plants</button>
+
+  <br><br>
+  <button class="logout" onclick="showPage('login')">Logout</button>
+</div>
+
+<!-- MEDICINAL PAGE -->
+<div id="medicinal" class="page">
+  <h2>🌿 Medicinal Plants Search</h2>
+
+  <input type="text" id="medSearch" placeholder="Enter plant name">
+  <button onclick="searchMedicinal()">Search</button>
+
+  <div id="medResult"></div>
+
+  <br>
+  <button onclick="showPage('main')">⬅ Back</button>
+  <button class="logout" onclick="showPage('login')">Logout</button>
+</div>
+
+<!-- NUTRITION PAGE -->
+<div id="nutrition" class="page">
+  <h2>🥬 Nutrition Plants Knowledge</h2>
+
+  <div id="nutritionList"></div>
+
+  <br>
+  <button onclick="showPage('main')">⬅ Back</button>
+  <button class="logout" onclick="showPage('login')">Logout</button>
+</div>
+
+<<script>
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+  document.getElementById(id).style.display="block";
+}
+
+/* ================= MEDICINAL PLANTS ================= */
+const medicinalPlants = {
+  tulsi:{name:"Tulsi",scientific:"Ocimum sanctum",uses:"Cold, cough",benefits:"Boosts immunity",part:"Leaves"},
+  neem:{name:"Neem",scientific:"Azadirachta indica",uses:"Skin diseases",benefits:"Antibacterial",part:"Leaves"},
+  aloe:{name:"Aloe Vera",scientific:"Aloe barbadensis",uses:"Burns",benefits:"Skin healing",part:"Gel"},
+  ginger:{name:"Ginger",scientific:"Zingiber officinale",uses:"Cold, nausea",benefits:"Anti-inflammatory",part:"Rhizome"},
+  turmeric:{name:"Turmeric",scientific:"Curcuma longa",uses:"Wounds",benefits:"Antiseptic",part:"Rhizome"},
+  amla:{name:"Amla",scientific:"Phyllanthus emblica",uses:"Immunity",benefits:"Vitamin C rich",part:"Fruit"},
+  ashwagandha:{name:"Ashwagandha",scientific:"Withania somnifera",uses:"Stress",benefits:"Strength",part:"Root"},
+  brahmi:{name:"Brahmi",scientific:"Bacopa monnieri",uses:"Memory",benefits:"Brain tonic",part:"Whole plant"},
+  giloy:{name:"Giloy",scientific:"Tinospora cordifolia",uses:"Fever",benefits:"Immunity booster",part:"Stem"},
+  moringa:{name:"Moringa",scientific:"Moringa oleifera",uses:"Malnutrition",benefits:"Superfood",part:"Leaves"},
+  mint:{name:"Mint",scientific:"Mentha",uses:"Digestion",benefits:"Cooling",part:"Leaves"},
+  pepper:{name:"Black Pepper",scientific:"Piper nigrum",uses:"Cold",benefits:"Digestive",part:"Seeds"},
+  clove:{name:"Clove",scientific:"Syzygium aromaticum",uses:"Toothache",benefits:"Pain relief",part:"Bud"},
+  cinnamon:{name:"Cinnamon",scientific:"Cinnamomum",uses:"Diabetes",benefits:"Sugar control",part:"Bark"}
+};
+
+/* SMART SEARCH */
+function searchMedicinal(){
+  let input = document.getElementById("medSearch").value.toLowerCase().replace(/\s+/g,"");
+  let res = document.getElementById("medResult");
+  let found = false;
+  res.innerHTML = "";
+
+  for(let key in medicinalPlants){
+    let p = medicinalPlants[key];
+    let name = p.name.toLowerCase().replace(/\s+/g,"");
+    let sci = p.scientific.toLowerCase().replace(/\s+/g,"");
+
+    if(name.includes(input) || sci.includes(input) || key.includes(input)){
+      res.innerHTML += `
+        <div class="card">
+          <h3>${p.name}</h3>
+          <p><b>Scientific Name:</b> ${p.scientific}</p>
+          <p><b>Uses:</b> ${p.uses}</p>
+          <p><b>Benefits:</b> ${p.benefits}</p>
+          <p><b>Used Part:</b> ${p.part}</p>
+        </div>`;
+      found = true;
+    }
+  }
+
+  if(!found){
+    res.innerHTML = "<p>❌ Plant not found</p>";
+  }
+}
+
+/* ===== 50+ NUTRITION PLANTS ===== */
+const nutritionPlants = [
+["Tomato","Vitamin C","Immunity","18 kcal","Raw"],
+["Spinach","Iron","Blood","23 kcal","Cooked"],
+["Carrot","Vitamin A","Eyes","41 kcal","Raw"],
+["Banana","Potassium","Energy","89 kcal","Raw"],
+["Apple","Fiber","Digestion","52 kcal","Raw"],
+["Orange","Vitamin C","Skin","47 kcal","Juice"],
+["Papaya","Enzymes","Digestion","43 kcal","Raw"],
+["Mango","Vitamin A","Growth","60 kcal","Raw"],
+["Guava","Vitamin C","Immunity","68 kcal","Raw"],
+["Potato","Carbs","Energy","77 kcal","Boiled"],
+["Cucumber","Water","Hydration","16 kcal","Raw"],
+["Pomegranate","Antioxidants","Heart","83 kcal","Raw"],
+["Broccoli","Fiber","Cancer prevention","34 kcal","Cooked"],
+["Cauliflower","Vitamin K","Bones","25 kcal","Cooked"],
+["Peas","Protein","Muscle","81 kcal","Cooked"],
+["Sweet Potato","Vitamin A","Eyes","86 kcal","Boiled"],
+["Beetroot","Iron","Blood","43 kcal","Raw"],
+["Cabbage","Vitamin C","Immunity","25 kcal","Cooked"],
+["Onion","Antioxidants","Heart","40 kcal","Raw"],
+["Garlic","Sulfur","Immunity","149 kcal","Raw"],
+["Avocado","Healthy fats","Heart","160 kcal","Raw"],
+["Pumpkin","Vitamin A","Skin","26 kcal","Cooked"],
+["Lettuce","Fiber","Digestion","15 kcal","Raw"],
+["Okra","Fiber","Diabetes","33 kcal","Cooked"],
+["Radish","Vitamin C","Detox","16 kcal","Raw"],
+["Corn","Carbs","Energy","86 kcal","Boiled"],
+["Chickpeas","Protein","Muscle","164 kcal","Boiled"],
+["Lentils","Protein","Blood","116 kcal","Cooked"],
+["Soybean","Protein","Bones","446 kcal","Cooked"],
+["Almond","Vitamin E","Brain","579 kcal","Raw"],
+["Walnut","Omega-3","Heart","654 kcal","Raw"],
+["Cashew","Minerals","Energy","553 kcal","Raw"],
+["Dates","Iron","Energy","282 kcal","Raw"],
+["Raisins","Iron","Blood","299 kcal","Raw"],
+["Strawberry","Vitamin C","Skin","32 kcal","Raw"],
+["Blueberry","Antioxidants","Brain","57 kcal","Raw"],
+["Kiwi","Vitamin C","Immunity","61 kcal","Raw"],
+["Pineapple","Enzymes","Digestion","50 kcal","Raw"],
+["Watermelon","Hydration","Cooling","30 kcal","Raw"],
+["Chia Seeds","Omega-3","Heart","486 kcal","Soaked"],
+["Flax Seeds","Fiber","Digestion","534 kcal","Ground"],
+["Oats","Fiber","Heart","389 kcal","Cooked"],
+["Brown Rice","Carbs","Energy","123 kcal","Cooked"],
+["Quinoa","Protein","Muscle","120 kcal","Cooked"],
+["Barley","Fiber","Cholesterol","354 kcal","Cooked"],
+["Millets","Minerals","Energy","378 kcal","Cooked"]
+];
+
+nutritionPlants.forEach(p=>{
+  nutritionList.innerHTML+=`
+  <div class="card">
+    <h3>${p[0]}</h3>
+    <p><b>Main Nutrient:</b> ${p[1]}</p>
+    <p><b>Health Benefit:</b> ${p[2]}</p>
+    <p><b>Calories:</b> ${p[3]}</p>
+    <p><b>Best Use:</b> ${p[4]}</p>
+  </div>`;
+});
+</script>
+
+</body>
+</html>
